@@ -9,11 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.10",
+    "@apollo/react-hooks": "^4.0.0",
+    "@emotion/react": "^11.9.0",
+    "apollo-boost": "^0.4.9",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-link-http": "^1.5.17",
+    "axios": "^0.26.1",
+    "graphql": "^16.3.0",
+    "graphql-tag": "^2.12.6",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0"
   },
   "devDependencies": {
+    "@emotion/babel-plugin": "^11.9.2",
+    "@emotion/eslint-plugin": "^11.7.0",
+    "@favware/graphql-pokemon": "^6.5.0",
     "eslint": "8.13.0",
     "eslint-config-next": "12.1.4"
   }
