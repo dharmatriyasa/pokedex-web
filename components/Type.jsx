@@ -1,7 +1,6 @@
 import styles from '../styles/Type.module.css';
 
 const Type = ({type}) => {
-    console.log(type);
     return (
         <button 
             className={`${styles.type} ${styles[type]} ${styles.label} ${styles.tooltop}`}

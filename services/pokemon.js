@@ -1,5 +1,19 @@
 import axios from "axios";
 
+export async function getAllPokemons(offset, limit){
+    const res = await axios.get(`
+        https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=${offset}`
+    );
+
+    const pokemons = await Promise.all(res.data.results.map( async(result) => {
+        const pokemonType = await getPokemonTypes(result.name).then(res => res);
+
+        return {...result, pokemonType}
+    }));
+
+    return pokemons;
+}
+
 export async function getPokemons(offset, limit){
     const res = await axios.get(`
         https://pokeapi.co/api/v2/pokemon/?limit=${limit}&offset=${offset}`
@@ -7,7 +21,9 @@ export async function getPokemons(offset, limit){
 
     const pokemons = await Promise.all(res.data.results.map( async(result, index) => {
 
-        const pokemonType = await getPokemonTypes(index+1).then(res => res);
+        console.log(result);
+        const pokemonType = await getPokemonTypes(result.name).then(res => res);
+
 
         const paddedId = ('00'+ (index+1)).slice(-3);
         const imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`;
@@ -19,9 +35,9 @@ export async function getPokemons(offset, limit){
     return pokemons;
 }
 
-export async function getPokemonTypes(number){
+export async function getPokemonTypes(name){
     const pokemon = await axios.get(`
-        https://pokeapi.co/api/v2/pokemon/${Number(number)}
+        https://pokeapi.co/api/v2/pokemon/${name}
     `).then(res => res.data.types);
 
     // console.log(pokemon);
@@ -34,7 +50,13 @@ export async function getPokemon(number){
         https://pokeapi.co/api/v2/pokemon/${Number(number)}
     `); 
 
-    console.log(pokemon);
-
     return pokemon;
+}
+
+export function catchPokemon(){
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(Math.random() > 0.5 ? true : true);
+        }, 2002);
+    })
 }

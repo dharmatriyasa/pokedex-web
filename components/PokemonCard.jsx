@@ -2,6 +2,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
 import Link from "next/link";
+import { capitalizeFirstLetter } from "../services/general";
 import Type from "./Type";
 
 const cardStyle = css({
@@ -14,8 +15,7 @@ const cardStyle = css({
     paddingBottom:'32px',
     paddingLeft: '32px',
     paddingRight: '32px',
-    marginTop: '20px',
-    marginBottom: '20px',
+    margin: '20px',
     background: '#fff',
     borderRadius: '25px',
     boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'
@@ -31,18 +31,20 @@ const imageStyle = css({
 });
 
 
-const PokemonCard = ({id, paddedId,name, url, imageUrl, pokemonType}) => {
-    // const hrefId = https://pokeapi.co/api/v2/pokemon/9/
+const PokemonCard = ({id, name, pokemonType}) => {
+    const paddedId = ('00'+ (id+1)).slice(-3);
+
+    let capitalName = capitalizeFirstLetter(name);
     return (
         <div css={cardStyle}>
             <div>
                 <h4 css={grayColor}>{paddedId}</h4>
             </div>
             <div>
-            <Link href={`/pokemon/${id}`}>
+            <Link href={`/pokemon/${id+1}`}>
                 <div>
-                <h1 css={grayColor}>{name}</h1>
-                <img css={imageStyle} src={imageUrl} alt="" />
+                <h1 css={grayColor}>{capitalName}</h1>
+                <img css={imageStyle} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`} alt="" />
                 </div>
             </Link>
             </div>
