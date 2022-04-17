@@ -7,6 +7,8 @@ import MyPokemonCard from "../components/MyPokemonCard";
 import Navbar from "../components/Navbar";
 import { KEY } from "../config/localStorage";
 import { getCachedValue, setCachedValue } from "../services/localStorage";
+import { Router } from "next/router";
+import PokeballAnimation from "../components/PokeballAnimation";
 
 
 
@@ -15,11 +17,35 @@ export default function myPokemons(){
     const [isRelease, setIsRelease] = useState(false);
     const [nickname, setNickname] = useState('');
     const [myPokemonLists, setMyPokemonLists] = useState();
+    const [isLoading, setIsLoading] = useState(false);
+
 
     useEffect(() => {
         setMyPokemonLists(getCachedValue(KEY));
         setIsExist(true);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+
+        const start = () => {
+            console.log('start');
+            setIsLoading(true);
+        }
+    
+        const end = () => {
+            console.log('finished');
+            setIsLoading(false);
+        }
+        Router.events.on("routeChangeStart", start);
+        Router.events.on("routeChangeComplete", end);
+        Router.events.on("routeChangeError", end);
+        return() => {
+            Router.events.off("routeChangeStart", start);
+            Router.events.off("routeChangeComplete", end);
+            Router.events.off("routeChangeError", end);
+        }
+        
+      }, []);
 
     const isReleaseFunction = (bool, nickname) => {
         setIsRelease(bool);
@@ -99,51 +125,57 @@ export default function myPokemons(){
     
 
     return(
-        <div>
-            <Navbar 
-                page={'mypokemons'}
-            />
-            {isRelease && (
-                <Modal
-                    isOpen={isRelease}
-                    modalBg={`dark`}
-                >
-                    <div css={boxStyle}>
-                    <h3>Are you sure want to catch {nickname}?</h3>
-                    <button 
-                        css={buttonStyle}
-                        onClick={() => releaseMyPokemon(nickname)}
+        <Fragment>
+            {isLoading ? (
+                <PokeballAnimation />
+            ): (
+            <div>
+                <Navbar 
+                    page={'mypokemons'}
+                />
+                {isRelease && (
+                    <Modal
+                        isOpen={isRelease}
+                        modalBg={`dark`}
                     >
-                        Yes
-                    </button>
-                    <button 
-                        css={buttonStyle}
-                        onClick={() => setIsRelease(false)}
-                    >
-                        No
-                    </button>
+                        <div css={boxStyle}>
+                        <h3>Are you sure want to catch {nickname}?</h3>
+                        <button 
+                            css={buttonStyle}
+                            onClick={() => releaseMyPokemon(nickname)}
+                        >
+                            Yes
+                        </button>
+                        <button 
+                            css={buttonStyle}
+                            onClick={() => setIsRelease(false)}
+                        >
+                            No
+                        </button>
+                        </div>
+                    </Modal>
+                )}
+                {isExist ? (
+                    <div css={container({isExist})}>
+                        {myPokemonLists.map((mypokemon, index) => {
+                            return(
+                                <MyPokemonCard
+                                    key={index}
+                                    name={mypokemon.name}
+                                    nickname={mypokemon.nickname}
+                                    imageUrl={mypokemon.imageUrl}
+                                    isReleaseFunction={isReleaseFunction}
+                                />
+                            )
+                        })}
                     </div>
-                </Modal>
+                ) : (
+                    <div css={notExistStyle}>
+                        <h1>You don't have any pokemons!</h1>
+                    </div>
+                )}
+            </div>
             )}
-            {isExist ? (
-                <div css={container({isExist})}>
-                    {myPokemonLists.map((mypokemon, index) => {
-                        return(
-                            <MyPokemonCard
-                                key={index}
-                                name={mypokemon.name}
-                                nickname={mypokemon.nickname}
-                                imageUrl={mypokemon.imageUrl}
-                                isReleaseFunction={isReleaseFunction}
-                            />
-                        )
-                    })}
-                </div>
-            ) : (
-                <div css={notExistStyle}>
-                    <h1>You don't have any pokemons!</h1>
-                </div>
-            )}
-        </div>
+        </Fragment>
     );
 }

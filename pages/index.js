@@ -2,21 +2,25 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Navbar from "../components/Navbar";
-import PokemonCard from '../components/PokemonCard'
-import { getAllPokemons, getPokemons } from '../services/pokemon'
+import PokemonCard from '../components/PokemonCard';
+import { getAllPokemons, getPokemons } from '../services/pokemon';
+import { Router } from "next/router";
+import PokeballAnimation from "../components/PokeballAnimation";
+
+
 
 export default function Home({initialPokemons}) {
 
   const [pokemons, setPokemons] = useState(initialPokemons);
   const [offset, setOffset] = useState(0);
-  const [url, setUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const fetchPokemon = (next) => {
     setTimeout(() => {
       setOffset(next ? offset + 20 : offset - 20);
-      setUrl
 
     }, 800);
     
@@ -24,11 +28,37 @@ export default function Home({initialPokemons}) {
 
   useEffect(() => {
     const fetchData = async() => {
+      // if(offset === 1120){
+        
+      // }
       const response = await getAllPokemons(offset, 20);
+      console.log(offset);
       setPokemons(response);
     }
     fetchData();
-  }, [offset])
+  }, [offset]);
+
+  useEffect(() => {
+
+    const start = () => {
+        console.log('start');
+        setIsLoading(true);
+    }
+
+    const end = () => {
+        console.log('finished');
+        setIsLoading(false);
+    }
+    Router.events.on("routeChangeStart", start);
+    Router.events.on("routeChangeComplete", end);
+    Router.events.on("routeChangeError", end);
+    return() => {
+        Router.events.off("routeChangeStart", start);
+        Router.events.off("routeChangeComplete", end);
+        Router.events.off("routeChangeError", end);
+    }
+    
+  }, [offset]);
 
   const breakpoints = [0, 576, 992];
 
@@ -74,13 +104,17 @@ export default function Home({initialPokemons}) {
     <Navbar
       page={'index'}
     />
+    {isLoading ? (
+      <PokeballAnimation />
+    ) : (
+    <Fragment>
     <div css={container}>
       {!!pokemons &&(
         pokemons.map((pokemon, index) => {
           return(
             <PokemonCard 
               key={index}
-              id={index+offset}
+              id={pokemon.pokemonId}
               // paddedId={pokemon.paddedId}
               name={pokemon.name}
               // url={pokemon.url}
@@ -92,13 +126,16 @@ export default function Home({initialPokemons}) {
       )}
     </div>
     <div css={paginationStyle}>
-      <button css={buttonStyle} onClick={() => fetchPokemon(false)}>
+      <button disabled={offset === 0} css={buttonStyle} onClick={() => fetchPokemon(false)}>
         <img width={`40em`} css={rotate} src="/assets/next.png" alt="" />
       </button>
-      <button css={buttonStyle} onClick={() => fetchPokemon(true)}>
+      <button disabled={offset === 1120} css={buttonStyle} onClick={() => fetchPokemon(true)}>
         <img width={`40em`} src="/assets/next.png" alt="" />
       </button>
     </div>
+    </Fragment>
+
+    )}
     </div>
   )
 }

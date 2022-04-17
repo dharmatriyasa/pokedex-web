@@ -32,19 +32,25 @@ const imageStyle = css({
 
 
 const PokemonCard = ({id, name, pokemonType}) => {
-    const paddedId = ('00'+ (id+1)).slice(-3);
+    // const paddedId = ('00'+ (id+1)).slice(-3);
+    // const paddedIdCard = ('00'+ (id+1)).slice(-3);
+
+    // console.log(paddedIdCard)
+
+    // console.log(id);
 
     let capitalName = capitalizeFirstLetter(name);
     return (
         <div css={cardStyle}>
             <div>
-                <h4 css={grayColor}>{paddedId}</h4>
+                <h4 css={grayColor}>#{id}</h4>
             </div>
             <div>
-            <Link href={`/pokemon/${id+1}`}>
+            <Link href={`/pokemon/${id}`}>
                 <div>
                 <h1 css={grayColor}>{capitalName}</h1>
-                <img css={imageStyle} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`} alt="" />
+                {/* <img css={imageStyle} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`} alt="" /> */}
+                <img css={imageStyle} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`} alt="" />
                 </div>
             </Link>
             </div>

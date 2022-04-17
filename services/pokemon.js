@@ -7,8 +7,11 @@ export async function getAllPokemons(offset, limit){
 
     const pokemons = await Promise.all(res.data.results.map( async(result) => {
         const pokemonType = await getPokemonTypes(result.name).then(res => res);
+        const pokemonId = await getPokemonId(result.name);
 
-        return {...result, pokemonType}
+        // console.log(pokemonId);
+
+        return {...result, pokemonId, pokemonType}
     }));
 
     return pokemons;
@@ -43,6 +46,15 @@ export async function getPokemonTypes(name){
     // console.log(pokemon);
 
     return pokemon;
+}
+
+export async function getPokemonId(name){
+    const pokemonId = await axios.get(`
+        https://pokeapi.co/api/v2/pokemon/${name}
+    `).then(res => res.data.id);
+
+
+    return pokemonId;
 }
 
 export async function getPokemon(number){

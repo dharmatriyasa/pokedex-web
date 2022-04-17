@@ -1,7 +1,6 @@
 /** @jsxRuntime classic /
 /** @jsx jsx */
 import { css, jsx, keyframes } from "@emotion/react";
-import { useEffect } from "react";
 
 const catchingPokemon = ({isCatching}) => css({
     position: 'fixed',

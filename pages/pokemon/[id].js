@@ -3,24 +3,21 @@
 import { css, jsx } from "@emotion/react";
 import { useState, useRef, useEffect, Fragment } from "react";
 import { catchPokemon, getPokemon } from "../../services/pokemon";
-// import pokeball from '/assets/pokeball.svg';
 import {capitalizeFirstLetter} from '../../services/general'
 import Modal from "../../components/Modal";
 import CatchingPokemon from "../../components/CatchingPokemon";
 import CaughtModal from "../../components/CaughtModal";
-import useLocalStorage from "../../hooks/useLocalStorage";
 import { KEY } from "../../config/localStorage";
 import { getCachedValue, setCachedValue } from "../../services/localStorage";
-import { useRouter } from "next/router";
-import { color } from "../../data/color";
-import pokeball from '../../public/assets/pokeballIcon.png';
+import { useRouter, Router } from "next/router";
 import NavbarPokemon from "../../components/NavbarPokemon";
+import PokeballAnimation from "../../components/PokeballAnimation";
+
 
 
 
 export default function Pokemon({pokemonData}){
 
-    console.log(pokeball);
     
     const [isInfo, setIsInfo] = useState(true);
     const [isStats, setIsStats] = useState(false);
@@ -34,17 +31,14 @@ export default function Pokemon({pokemonData}){
     const [modalBg, setModalBg] = useState('');
     const [pokemonNameModal, setPokemonNameModal] = useState(false);
     const [isAfterNickname, setIsAfterNickname] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [isNicknameUnique, setIsNicknameUnique] = useState(true);
     
 
-    const [myPokemonList, setMyPokemonList] = useLocalStorage(KEY, null);
     const nickname = useRef(null);
     const router = useRouter();
 
     const typeColor = pokemonData.types[0].type.name;
-    console.log(typeColor);
-    console.log(color[typeColor]);
     
     const menubarItems = [
         {
@@ -140,7 +134,7 @@ export default function Pokemon({pokemonData}){
     );
 
 
-    const sectionStyle = ({pokemonType}) => css({
+    const sectionStyle = css({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -471,19 +465,34 @@ export default function Pokemon({pokemonData}){
     })
 
     useEffect(() => {
-        // setTimeout(() => {
+
+        const start = () => {
+            console.log('start');
+            setIsLoading(true);
+        }
+
+        const end = () => {
+            console.log('finished');
             setIsLoading(false);
-            console.log('ehehe');
+        }
+        Router.events.on("routeChangeStart", start);
+        Router.events.on("routeChangeComplete", end);
+        Router.events.on("routeChangeError", end);
+        return() => {
+            Router.events.off("routeChangeStart", start);
+            Router.events.off("routeChangeComplete", end);
+            Router.events.off("routeChangeError", end);
+        }
+       
+    }, []);
 
-        // }, 5000)
-    }, [pokemonData]);
-
-    console.log(pokemonData);
-    const a = '#49D0B0';
+    
     return(
         <div>
-        {!isLoading ? (
-            <div css={sectionStyle({a})}>
+        {isLoading ? (
+            <PokeballAnimation />
+        ):(
+            <div css={sectionStyle}>
                 <Modal
                     isOpen={isOpen}
                     modalBg='dark'
@@ -698,19 +707,6 @@ export default function Pokemon({pokemonData}){
                     </button>
                 </div>
             </div>
-        ):(
-            <div css={{ 
-                backgourndColor: '#000',
-                height: '100vh',
-                width: '100vw',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                fontSize: '50px'
-             }}>
-                 <h1>WAITING....</h1>
-             </div>
         )}
         </div>
     )
@@ -724,12 +720,15 @@ export async function getServerSideProps(context){
 
     const res = await getPokemon(params.id);
 
-    const paddedId = ('00'+ (params.id)).slice(-3);
+    // const paddedId = ('00'+ (params.id)).slice(-3);
 
-    const imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`;
+    // const imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`;
+    const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${params.id}.png`;
+    // const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${params.id}.png`;
+
 
     const pokemonData = {
-        id: paddedId,
+        id: params.id,
         abilities: res.data.abilities,
         moves: res.data.moves,
         name: capitalizeFirstLetter(res.data.name),
