@@ -12,7 +12,7 @@ import PokeballAnimation from "../components/PokeballAnimation";
 
 
 
-export default function myPokemons(){
+export default function MyPokemons(){
     const [isExist, setIsExist] = useState(false);
     const [isRelease, setIsRelease] = useState(false);
     const [nickname, setNickname] = useState('');
@@ -171,7 +171,7 @@ export default function myPokemons(){
                     </div>
                 ) : (
                     <div css={notExistStyle}>
-                        <h1>You don't have any pokemons!</h1>
+                        <h1>You don&apos;t have any pokemons!</h1>
                     </div>
                 )}
             </div>
