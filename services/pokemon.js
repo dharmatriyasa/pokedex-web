@@ -68,7 +68,34 @@ export async function getPokemon(number){
 export function catchPokemon(){
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve(Math.random() > 0.5 ? true : true);
+            resolve(Math.random() > 0.5 ? true : false);
         }, 2002);
     })
+}
+
+export function generatePokeSummary(pokemons){
+    let results = [];
+
+    console.log(pokemons, 'services');
+
+    pokemons.forEach((pokemon, index) => {
+        let pokemonExists = false;
+
+        if(index === 0){
+            results.push({name: pokemon.name, captured: 1});
+        } else {
+            for(let result of results){
+                if(result.name === pokemon.name) pokemonExists = true;
+            }
+
+            if(pokemonExists) {
+                let pokemonIndex = results.findIndex((result) => result.name === pokemon.name);
+                results[pokemonIndex].captured++;
+            } else {
+                results.push({name: pokemon.name, captured: 1});
+            }
+        }
+    });
+
+    return results;
 }

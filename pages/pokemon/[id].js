@@ -265,26 +265,22 @@ export default function Pokemon({pokemonData}){
     const sectionItems = css({
         display: 'flex',
         flexDirection: 'column',
-        // border: '1px solid red'
     });
 
     const sectionItem = css({
         display: 'flex',
         flexDirection: 'row',
-        // border: '1px solid red',
         margin: '12px 50px',
         textAlign: 'left',
         
     });
 
     const sectionItemTitle = css({
-        // border: '1px solid red',
         flexBasis: '40%',
         color: '#878d91',
     });
 
     const sectionItemDesc = css({
-        // border: '1px solid red',
         flexBasis: '60%',
         color: '#878d91',
     });
@@ -322,16 +318,13 @@ export default function Pokemon({pokemonData}){
         [mq[1]] : {
             display: 'none'
         },
-        // background: `url('assets/pokeballIcon.svg')`,
     });
 
     const catchButton = css({
         width: '70px',
         height: '70px',
         borderRadius: '100%',
-        // background: `url(${pokeball})`,
         backgroundColor: '#FFF'
-
     });
 
     const boxStyle = css({
@@ -368,7 +361,7 @@ export default function Pokemon({pokemonData}){
         padding: '10px 20px',
         margin: '10px 0px',
         backgroundColor: '#3a799d',
-        color: '#FFF'
+        color: '#FFF',
     });
 
     const flexColumn = css({
@@ -500,7 +493,7 @@ export default function Pokemon({pokemonData}){
                 <div css={boxStyle}>
                     <h3>Are you sure want to catch {pokemonData.name}?</h3>
                     <button 
-                        css={buttonStyle}
+                    css={buttonStyle}
                         onClick={() => handleCatchingModal()}
                     >
                         Yes
@@ -535,7 +528,7 @@ export default function Pokemon({pokemonData}){
                         modalBg='light'
                     >
                         <div>
-                            <img src={pokemonData.imageUrl} alt="" />
+                            <img css={imageStyle} src={pokemonData.imageUrl} alt="" />
                         <div css={descNicknameStyle}>
                             {isNicknameUnique ? (
                                 <Fragment>
@@ -572,7 +565,7 @@ export default function Pokemon({pokemonData}){
                         modalBg='light'
                     >
                         <div>
-                            <img src={pokemonData.imageUrl} alt="" />
+                            <img css={imageStyle} src={pokemonData.imageUrl} alt="" />
                         <div css={flexColumn}>
                             <div css={descSavedStyle}>
                                 <h5>Yeay! Dharma is on your list!</h5>

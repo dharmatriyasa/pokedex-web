@@ -31,13 +31,13 @@ const imageStyle = css({
 });
 
 
-const PokemonCard = ({id, name, pokemonType}) => {
+const PokemonCard = ({id, name, pokemonType, summaryPokemon}) => {
     // const paddedId = ('00'+ (id+1)).slice(-3);
     // const paddedIdCard = ('00'+ (id+1)).slice(-3);
 
     // console.log(paddedIdCard)
 
-    // console.log(id);
+    console.log(summaryPokemon);
 
     let capitalName = capitalizeFirstLetter(name);
     return (
@@ -63,6 +63,11 @@ const PokemonCard = ({id, name, pokemonType}) => {
                     />
                     )
                 })}
+            </div>
+            <div css={{ marginTop: '10px', color: '#A1A09F' }}>
+                {!!summaryPokemon && (
+                    <h5>Owned: {summaryPokemon.captured}</h5>
+                )}
             </div>
         </div>
     );

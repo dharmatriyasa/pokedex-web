@@ -14,14 +14,17 @@ const CaughtModal = ({imageUrl, pokemonName, isCaught}) => {
     const textStyle = ({isCaught}) => css({
         fontSize: '24px',
         color: `${isCaught ? '#56F23B' : '#FFF'}`,
+    });
+
+    const imageStyle = css({
+        width: '10em'
     })
-    console.log(isCaught);
 
     return (
 
         <div>
             <img css={topImageSection} src="/assets/pokeball1.svg" alt="" />
-            <img src={imageUrl} alt="" />
+            <img css={imageStyle} src={imageUrl} alt="" />
             <h4 css={textStyle({isCaught})}>
                 {isCaught ? `You got ${pokemonName}!` : `Oh no! ${pokemonName} run away`}
             </h4>

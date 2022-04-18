@@ -22,8 +22,8 @@ const fontStyle = css({
 const imagePokemonStyle = css({
     position: 'absolute',
     zIndex: '40',
-    width: '10.5em',
-    top: '50px'
+    width: '13.5em',
+    top: '100px'
 });
 
 const pokeballEffect = keyframes`

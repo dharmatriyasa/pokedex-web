@@ -5,32 +5,31 @@ import axios from "axios";
 import { useState, useEffect, Fragment } from "react";
 import Navbar from "../components/Navbar";
 import PokemonCard from '../components/PokemonCard';
-import { getAllPokemons, getPokemons } from '../services/pokemon';
+import { generatePokeSummary, getAllPokemons, getPokemons } from '../services/pokemon';
 import { Router } from "next/router";
 import PokeballAnimation from "../components/PokeballAnimation";
-
+import { getCachedValue } from "../services/localStorage";
+import {KEY} from "../config/localStorage";
+import { capitalizeFirstLetter } from "../services/general";
 
 
 export default function Home({initialPokemons}) {
 
   const [pokemons, setPokemons] = useState(initialPokemons);
   const [offset, setOffset] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [myPokemons, setSummaryPokemons] = useState(null);
+  const [summaryPokemons, setSummaryPokemons] = useState(null);
+  
+  
 
 
   const fetchPokemon = (next) => {
-    setTimeout(() => {
       setOffset(next ? offset + 20 : offset - 20);
-
-    }, 800);
-    
   }
 
   useEffect(() => {
     const fetchData = async() => {
-      // if(offset === 1120){
-        
-      // }
       const response = await getAllPokemons(offset, 20);
       console.log(offset);
       setPokemons(response);
@@ -59,6 +58,15 @@ export default function Home({initialPokemons}) {
     }
     
   }, [offset]);
+
+  useEffect(() => {
+    // console.log(localStorage.getItem(KEY));
+    // setIsLoading(true);
+    // setTimeout(() => {
+      setSummaryPokemons(generatePokeSummary(getCachedValue(KEY)));
+      setIsLoading(false);
+    // }, 2000);
+  }, [])
 
   const breakpoints = [0, 576, 992];
 
@@ -115,11 +123,9 @@ export default function Home({initialPokemons}) {
             <PokemonCard 
               key={index}
               id={pokemon.pokemonId}
-              // paddedId={pokemon.paddedId}
               name={pokemon.name}
-              // url={pokemon.url}
-              // imageUrl={pokemon.imageUrl}
               pokemonType={pokemon.pokemonType}
+              summaryPokemon={(summaryPokemons.find(el => el.name === capitalizeFirstLetter(pokemon.name)) )}
             />
           )
         })
@@ -143,11 +149,17 @@ export default function Home({initialPokemons}) {
 export async function getServerSideProps({req, query}){
 
   const initialPokemons = await getAllPokemons(`https://pokeapi.co/api/v2/pokemon`);
-  console.log(initialPokemons);
+
+  let myPokemonLists;
+
+  // if(typeof window !== "undefined"){
+  //   myPokemonLists = getCachedValue(KEY);
+  // }
 
   return {
     props: {
-      initialPokemons
+      initialPokemons,
+      // myPokemonLists
     }
   }
 }
