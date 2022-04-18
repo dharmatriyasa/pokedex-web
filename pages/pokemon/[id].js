@@ -38,7 +38,6 @@ export default function Pokemon({pokemonData}){
     const nickname = useRef(null);
     const router = useRouter();
 
-    const typeColor = pokemonData.types[0].type.name;
     
     const menubarItems = [
         {
@@ -566,7 +565,7 @@ export default function Pokemon({pokemonData}){
                             <img css={imageStyle} src={pokemonData.imageUrl} alt="" />
                         <div css={flexColumn}>
                             <div css={descSavedStyle}>
-                                <h5>Yeay! Dharma is on your list!</h5>
+                                <h5>Yeay! {nickname.current.value} is on your list!</h5>
                             </div>
                             <div css={flexRowCenter}>
                                 <button 
