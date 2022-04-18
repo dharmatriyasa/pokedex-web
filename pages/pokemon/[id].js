@@ -97,7 +97,7 @@ export default function Pokemon({pokemonData}){
     const onSubmitForm = (e) => {
         e.preventDefault();
 
-        const currentPokemonLists = getCachedValue(KEY);
+        const currentPokemonLists = getCachedValue(KEY) || [];
 
         
 
@@ -460,12 +460,10 @@ export default function Pokemon({pokemonData}){
     useEffect(() => {
 
         const start = () => {
-            console.log('start');
             setIsLoading(true);
         }
 
         const end = () => {
-            console.log('finished');
             setIsLoading(false);
         }
         Router.events.on("routeChangeStart", start);
@@ -707,9 +705,6 @@ export default function Pokemon({pokemonData}){
 
 export async function getServerSideProps(context){
     const {req, params} = context;
-
-    // console.log(req);
-    // console.log(params.id);
 
     const res = await getPokemon(params.id);
 

@@ -76,8 +76,6 @@ export function catchPokemon(){
 export function generatePokeSummary(pokemons){
     let results = [];
 
-    console.log(pokemons, 'services');
-
     pokemons.forEach((pokemon, index) => {
         let pokemonExists = false;
 

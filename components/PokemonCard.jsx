@@ -37,7 +37,6 @@ const PokemonCard = ({id, name, pokemonType, summaryPokemon}) => {
 
     // console.log(paddedIdCard)
 
-    console.log(summaryPokemon);
 
     let capitalName = capitalizeFirstLetter(name);
     return (
@@ -45,11 +44,10 @@ const PokemonCard = ({id, name, pokemonType, summaryPokemon}) => {
             <div>
                 <h4 css={grayColor}>#{id}</h4>
             </div>
-            <div>
+            <div css={{ cursor: 'pointer' }}>
             <Link href={`/pokemon/${id}`}>
                 <div>
                 <h1 css={grayColor}>{capitalName}</h1>
-                {/* <img css={imageStyle} src={`https://assets.pokemon.com/assets/cms2/img/pokedex/detail/${paddedId}.png`} alt="" /> */}
                 <img css={imageStyle} src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`} alt="" />
                 </div>
             </Link>

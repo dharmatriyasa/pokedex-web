@@ -21,19 +21,22 @@ export default function MyPokemons(){
 
 
     useEffect(() => {
-        setMyPokemonLists(getCachedValue(KEY));
+        const mypokemons = getCachedValue(KEY); 
+
+        if(mypokemons == null){
+            return;
+        }
+        setMyPokemonLists(mypokemons);
         setIsExist(true);
     }, []);
 
     useEffect(() => {
 
         const start = () => {
-            console.log('start');
             setIsLoading(true);
         }
     
         const end = () => {
-            console.log('finished');
             setIsLoading(false);
         }
         Router.events.on("routeChangeStart", start);
@@ -90,9 +93,11 @@ export default function MyPokemons(){
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        textAlign: 'center',
         color: '#f08386',
-        border: '1px solid red',
-        marign: '100px 50px'
+        marign: '100px 50px',
+        // padding: '200px 0px',
+        height: '100vh'
     });
 
     const boxStyle = css({
@@ -157,7 +162,7 @@ export default function MyPokemons(){
                 )}
                 {isExist ? (
                     <div css={container({isExist})}>
-                        {myPokemonLists.map((mypokemon, index) => {
+                        {myPokemonLists?.map((mypokemon, index) => {
                             return(
                                 <MyPokemonCard
                                     key={index}

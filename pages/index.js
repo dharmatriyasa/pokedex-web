@@ -31,7 +31,6 @@ export default function Home({initialPokemons}) {
   useEffect(() => {
     const fetchData = async() => {
       const response = await getAllPokemons(offset, 20);
-      console.log(offset);
       setPokemons(response);
     }
     fetchData();
@@ -40,12 +39,10 @@ export default function Home({initialPokemons}) {
   useEffect(() => {
 
     const start = () => {
-        console.log('start');
         setIsLoading(true);
     }
 
     const end = () => {
-        console.log('finished');
         setIsLoading(false);
     }
     Router.events.on("routeChangeStart", start);
@@ -57,14 +54,21 @@ export default function Home({initialPokemons}) {
         Router.events.off("routeChangeError", end);
     }
     
-  }, [offset]);
+  }, []);
 
   useEffect(() => {
-    // console.log(localStorage.getItem(KEY));
-    // setIsLoading(true);
     // setTimeout(() => {
-      setSummaryPokemons(generatePokeSummary(getCachedValue(KEY)));
+      const mypokemons = getCachedValue(KEY);
+      // console.log(mypokemons);
+
+      
       setIsLoading(false);
+      if(mypokemons == null){
+        // console.log(mypokemons);
+        return;
+      }
+      
+      setSummaryPokemons(generatePokeSummary(mypokemons));
     // }, 2000);
   }, [])
 
@@ -125,7 +129,7 @@ export default function Home({initialPokemons}) {
               id={pokemon.pokemonId}
               name={pokemon.name}
               pokemonType={pokemon.pokemonType}
-              summaryPokemon={(summaryPokemons.find(el => el.name === capitalizeFirstLetter(pokemon.name)) )}
+              summaryPokemon={(summaryPokemons?.find(el => el.name === capitalizeFirstLetter(pokemon.name)) )}
             />
           )
         })
