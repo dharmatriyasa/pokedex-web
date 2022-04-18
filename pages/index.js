@@ -105,6 +105,7 @@ export default function Home({initialPokemons}) {
     margin: '0px 10px',
     border: 'none',
     backgroundColor: 'transparent',
+    cursor: 'pointer'
   });
 
   const rotate = css({
